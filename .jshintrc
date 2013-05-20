@@ -7,6 +7,7 @@
     "camelcase": true,
     "curly": true,
     "eqeqeq": true,
+    "eqnull": true,
     "immed": true,
     "indent": 4,
     "latedef": true,
@@ -15,8 +16,8 @@
     "quotmark": "single",
     "regexp": true,
     "undef": true,
-    "unused": true,
-    "strict": true,
+    "unused": false,
+    "strict": false,
     "trailing": true,
     "smarttabs": true
 }
