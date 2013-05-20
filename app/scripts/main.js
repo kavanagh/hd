@@ -5,10 +5,10 @@ $(function() {
   'use strict';
 
   var targets = '#target1, #target2',
-      articleId = location.pathname,
-      userId = reactor.UserService.getUserId();
-
-  reactor.ReactionService.getQuestion(articleId, userId).done(function (question) {
+      article = 'foobar' || location.pathname,
+      user = reactor.UserService.getUserId();
+console.log(article, user);
+  reactor.ReactionService.getQuestion(article, user).done(function (question) {
 
     var reaction = new reactor.Reaction(question);
 

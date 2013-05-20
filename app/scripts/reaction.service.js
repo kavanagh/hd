@@ -10,7 +10,7 @@ testResult = {x: 1, y: 1};
 
 // uncomment to use mockdata;
 /* * /
-hostname = 'reaction-l.herokuapp.com';
+hostname = 'localhost:5000'; //reaction-l.herokuapp.com';
 /* */
 
 var mockData = {
@@ -26,37 +26,41 @@ reactor.ReactionService = (function() {
       dataType: 'jsonp',
       cache: true,
       jsonpCallback: 'get_' + path + '_cb',
-      params: params || null,
+      data: params || null,
       url: ['http:/', hostname, path].join('/')
     });
   };
 
   return {
 
-    getQuestion: function (articleId, userId) {
-
+    getQuestion: function (article, user) {
       if (hostname) {
-        return createGetRequest('question', {article: articleId, user: userId});
+        return createGetRequest('question', {article: article, user: user});
       }
 
       var reaction = mockData.question;
 
-      reaction.userId = userId;
+      reaction.userId = user;
       reaction.result = testResult;
 
       return $.Deferred().resolve(reaction);
 
     },
 
-    getResults: function(articleId) {
+    getResults: function(article) {
+
+      if (hostname) {
+        return createGetRequest('results', {article: article});
+      }
+
       return $.Deferred().resolve({
-        articleId: articleId,
+        article: article,
         matrix: [[10, 50, 20, 20]]
       });
     },
 
-    postVote: function(articleId, userId, result) {
-      articleId = userId = result;
+    postVote: function(article, user, result) {
+      article = user = result;
       return $.Deferred().resolve(true);
     }
 
