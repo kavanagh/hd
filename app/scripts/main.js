@@ -1,28 +1,32 @@
 var ReactionService = {
+
   getQuestion: function (articleId, userId) {
     // Anonymous - with result
-    //var reaction = new Reaction({question: 'What is your reaction?',  xTicks: 1, yTicks: 4, userId: '', result: {x: 1, y: 10}});
+    //var reaction = new Reaction({question: 'What is your reaction?', xTicks: 1, yTicks: 4, userId: '', result: {x: 1, y: 10}});
 
     // Anonymous - without result
-    //var reaction = new Reaction({question: 'What is your reaction?',  xTicks: 1, yTicks: 4, userId: '');
+    //var reaction = new Reaction({question: 'What is your reaction?', xTicks: 1, yTicks: 4, userId: '');
 
     // Known - with result
-    //var reaction = new Reaction({question: 'What is your reaction?',  xTicks: 1, yTicks: 4, result: {x: 1, y: 10}});
+    //var reaction = new Reaction({question: 'What is your reaction?', xTicks: 1, yTicks: 4, userId: userId, result: {x: 1, y: 10}});
 
     // known without result
-    var reaction = {question: 'What is your reaction?',  xTicks: 1, yTicks: 4, userId: userId, };
+    var reaction = {question: 'What is your reaction?',  xTicks: 1, yTicks: 4, userId: userId };
 
-    return $.Deferred().resolve(reaction); 
+    return $.Deferred().resolve(reaction);
+
   },
+
   getResults: function(articleId) {
-    return $.Deferred().resolve([
-      [10, 50, 20, 20]
-    ]);
+    return $.Deferred().resolve({
+      articleId: articleId,
+      matrix: [[10, 50, 20, 20]]
+    });
   },
+
   postVote: function(articleId, userId, result) {
     return $.Deferred().resolve(true);
-  },
-
+  }
 }
 
 var Reaction = Backbone.Model.extend({
@@ -51,14 +55,19 @@ var Reaction = Backbone.Model.extend({
     if (this.get('hasVoted') || !this.get('userId')) {
       return;
     }
-    this.set('result', {x: x, y: y});
-    this.set('hasVoted', true);
-    this.set('state', 'results');
+
+    var result = {x: x, y: y};
+    var self = this;
+    
+    ReactionService.postVote(self.get('articleId'), self.get('userId'), result).done(function() {
+      self.set('result', result);
+      self.set('hasVoted', true);
+      self.set('state', 'results');
+    });
+    
   }
+
 });
-
-
-
 
 
 var VoteWidget = Backbone.View.extend({
@@ -72,7 +81,6 @@ var VoteWidget = Backbone.View.extend({
   },
 
   vote: function (event) {
-    console.log('VOTE', event);
     var $reaction = $(event.currentTarget);
     var x = $reaction.data('reaction-x');
     var y = $reaction.data('reaction-y');
@@ -84,12 +92,13 @@ var VoteWidget = Backbone.View.extend({
 
   render: function() {
     
-    var dom = '<div class="reaction-question">'+ this.model.get('question') + '</div>';
+    var reaction = this.model,
+        dom = '<div class="reaction-question">'+ reaction.get('question') + '</div>';
 
     var m = reaction.getMatix(),
-        currentState = this.model.get('state'),
-        result = this.model.get('result'),
-        userId = this.model.get('userId');
+        currentState = reaction.get('state'),
+        result = reaction.get('result'),
+        userId = reaction.get('userId');
 
     var self = this;
     var promise = $.ajax();
@@ -102,6 +111,7 @@ var VoteWidget = Backbone.View.extend({
         }).join('') + '</div>';
       }).join('');
       this.$el.html(dom);
+
     } else {
 
       if (!userId) {
@@ -112,8 +122,8 @@ var VoteWidget = Backbone.View.extend({
 
       dom += 'Everyone else\'s results: ';
         
-      everyonesResults.done(function(data) {
-        dom += _.flatten(data).join(', ');
+      ReactionService.getResults(this.model.get('articleId')).done(function(data) {
+        dom += _.flatten(data.matrix).join(', ');
         self.$el.html(dom);
       });
     }
@@ -126,7 +136,7 @@ $(function() {
       articleId = 'blahblahblah',
       userId = 'reuwiorwuio';
 
-  ReactionService.getQuestion(articleId).done(function (question) {
+  ReactionService.getQuestion(articleId, userId).done(function (question) {
     var reaction = new Reaction(question);
 
     $(targets).each(function  () {
@@ -134,6 +144,7 @@ $(function() {
 
       new VoteWidget({model: reaction, el: $('<div class="reaction-widget" />').insertAfter(target)[0]}).render();
     });
-  })
+
+  });
 
 });
