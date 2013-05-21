@@ -12,6 +12,9 @@ var reactor = reactor || {};
     return $('<div />').prependTo(target)[0];
   };
 
+  if (!window.testSelector)
+    reactor.hostname = 'reaction-c.herokuapp.com';
+
   reactor.Reaction.fetchQuestion(article, user).done(function (model) {
 
       $(function () {
