@@ -134,7 +134,7 @@ module.exports = function (app, express) {
 
   // adddummydata
   app.get('/setdummydata', function (req, res) {
-    require('.task/set-dummy-data');
+    require('./task/set-dummy-data');
     res.send('done');
   });
 
