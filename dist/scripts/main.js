@@ -7142,7 +7142,7 @@ var reactor = reactor || {};
   }
 
   var getUserId = function() {
-    return ayscCookie && ayscCookie.length >= 2 ? ayscCookie[0] : null;
+    return ayscCookie && ayscCookie.length >= 2 ? ayscCookie[1] : null;
   };
 
   var getUserMockUserId = function() {
