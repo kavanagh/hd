@@ -1,13 +1,8 @@
 var reactor = reactor || {};
 
-var testUser = null;
+(function () {
 
-// uncomment to have a test user
-/* */
-testUser = '123456';
-/* */
-
-reactor.UserService = (function () {
+  var exports = reactor.UserService = {};
 
   var cookieName = 'AYSC',
       ayscCookie = $.cookie(cookieName);
@@ -24,11 +19,10 @@ reactor.UserService = (function () {
     return testUser;
   };
 
-  return {
-    setUserId: function(userId) {
-      $.cookie(cookieName, 'USERID=' + userId + ':');
-    },
-    getUserId: (testUser ? getUserMockUserId : getUserId)
+  exports.getUserId = testUser ? getUserMockUserId : getUserId;
+
+  exports.setUserId = function(userId) {
+    $.cookie(cookieName, 'USERID=' + userId + ':');
   };
 
 }());

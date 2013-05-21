@@ -15,29 +15,54 @@ reactor.Reaction = Backbone.Model.extend({
 
   getMatix: function() {
 
-    var a = [], xt = this.get('xTicks'), yt = this.get('yTicks');
+    var a = this._allAnswers,
+        xTicks = this.get('xTicks'),
+        yTicks = this.get('yTicks');
 
-    for (var i = 0; i < xt; i +=1) {
-      a.push(new Array(yt));
-    }
+    //prepare the matrix for the first time
+    //if (!a) {
+      a = this._allAnswers = [];
+      for (var i = 0; i < xTicks; i +=1) {
+        a.push(new Array(yTicks));
+      }
+    //}
 
     return a;
+
+    var deferred = this.canVote() ? $.Deferred().resolve(a) : reactor.ReactionService.getResults(this.get('articleId')).pipe(_.bind(function(data) {
+      return data; //this._allAnswers = a;
+    }, this));
+
+    return deferred;
+  },
+
+  canVote: function() {
+
+    var hasVoted = this.get('hasVoted'),
+        isKnownUser = !!this.get('userId');
+
+    return !hasVoted && isKnownUser;
   },
 
   vote: function(x, y) {
-    if (this.get('hasVoted') || !this.get('userId')) {
+
+    if (!this.canVote()) {
       return;
     }
 
     var result = {x: x, y: y};
-    var self = this;
 
-    reactor.ReactionService.postVote(self.get('articleId'), self.get('userId'), result).done(function() {
-      self.set('result', result);
-      self.set('hasVoted', true);
-      self.set('state', 'results');
-    });
-
+    reactor.ReactionService.postVote(this.get('articleId'), this.get('userId'), result).done(_.bind(function() {
+      this.set('result', result);
+      this.set('hasVoted', true);
+      this.set('state', 'results');
+    }, this));
   }
 
 });
+
+reactor.Reaction.fetchQuestion = function (article, user) {
+  return reactor.ReactionService.getQuestion(article, user).pipe(function (data) {
+    return new reactor.Reaction(data);
+  });
+}
