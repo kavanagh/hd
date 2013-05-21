@@ -54,11 +54,11 @@ module.exports = function (app, express) {
           response.userId = req.query.user;
 
           // Look up this user's vote (key format: "vote:USERID:ARTICLEID")
-          redis.hgetall('vote:' + req.query.user + ':' + req.query.article, function (err, obj) {
+          redis.get('answer:' + req.query.user + ':' + req.query.article, function (err, obj) {
             if (err) throw err;
 
             // Add user's vote to the response (even if null), and send it
-            response.vote = obj;
+            response.result = JSON.parse(obj);
             res.jsonp(response);
           });
         }
@@ -130,27 +130,29 @@ module.exports = function (app, express) {
       }
 
       // Update the resultsX and resultsY things for this article
+      var resultsKey = 'results:' + req.query.article;
       var answer = JSON.parse(req.query.answer);
+      var fieldToIncrement = answer.x + ',' + answer.y;
 
-      redis.hincrby('resultsX:' + req.query.article, answer.x, 1, function (err, outcome) {
-        console.log('outcomeX', outcome);
+      redis.hincrby(resultsKey, fieldToIncrement, 1, function (err, outcome) {
+        if (err) throw err;
 
-        redis.hincrby('resultsY:' + req.query.article, answer.y, 1, function (err, outcome) {
-          console.log('outcomeY', outcome);
+        console.log('hincrby outcome', outcome, resultsKey);
 
-          // Increment vote count on the question
-          var questionKey = 'question:' + req.query.article;
-          redis.hincrby(questionKey, 'answersCount', 1, function () {
-            console.log('All done.');
-            res.jsonp(response);
-          });
+        // Increment vote count on the question
+        var questionKey = 'question:' + req.query.article;
+        redis.hincrby(questionKey, 'answersCount', 1, function (err, outcome) {
+          if (err) throw err;
+
+          console.log('All done.', outcome, questionKey);
+
+          res.jsonp(response);
         });
       });
     });
   });
 
   
-
   // adddummydata
   app.get('/setdummydata', function (req, res) {
     require('./task/set-dummy-data');
