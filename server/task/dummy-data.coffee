@@ -15,11 +15,11 @@ dummy = {
       yLabels: 'Significant,Meh'
     ,
       articleId: '/cms/s/0/d0504cfe-c157-11e2-b93b-00144feab7de.html'
-      question: 'How is the deal for Yahoo! shareholders?'
+      question: 'How is the deal for Yahoo shareholders?'
       xTicks: '2'
-      yTicks: '1'
-      xLabels: 'Bad,Good'
-      yLabels: ''
+      yTicks: '2'
+      xLabels: 'Bad for Yahoo,Good for Yahoo'
+      yLabels: 'Bad for Tumblr,Good for Tumblr'
   ]
 
   # resultsX:
