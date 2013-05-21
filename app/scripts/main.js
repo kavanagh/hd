@@ -4,12 +4,12 @@ var reactor = reactor || {};
 
   'use strict';
 
-  var targets = '#target1, #target2',
-      article = testArticle || location.pathname,
+  var targets = window.testSelector || '.railSection:first',
+      article = window.testArticle || location.pathname,
       user = reactor.UserService.getUserId();
 
   var createContainerElement = function(target) {
-    return $('<div />').insertAfter(target)[0];
+    return $('<div />').prependTo(target)[0];
   };
 
   reactor.Reaction.fetchQuestion(article, user).done(function (model) {
