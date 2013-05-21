@@ -15,7 +15,7 @@ dummy = {
       yLabels: 'Significant,Meh'
     ,
       articleId: '/cms/s/0/d0504cfe-c157-11e2-b93b-00144feab7de.html'
-      question: 'How is the deal for Yahoo shareholders?'
+      question: 'Is this a good deal for both companies?'
       xTicks: '2'
       yTicks: '2'
       xLabels: 'Bad for Yahoo,Good for Yahoo'

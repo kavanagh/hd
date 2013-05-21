@@ -60,7 +60,7 @@ var reactor = reactor || {};
 
       dom += '<div class="rlabels" style="margin-top:5px;">' + (xLabels[1] || '') + '</div>';
       
-      dom += '<div class="rlabels" style="margin-bottom:5px;float:left;text-align:right;padding-top:'+ (height/2-6) +'px;padding-right:5px;">' + (yLabels[0] || '') + '</div>';
+      dom += '<div class="rlabels" style="margin-bottom:5px;float:left;text-align:right;padding-top:'+ (height/2-6) +'px;padding-right:5px;max-width:60px;">' + (yLabels[0] || '') + '</div>';
 
       dom += '<div class="reaction-graph" style="float:left;width:' + width + 'px;height:' + height + 'px;">';
 
@@ -76,7 +76,7 @@ var reactor = reactor || {};
 
       dom += '</div>';
 
-      dom += '<div class="rlabels" style="margin-bottom:5px;float:left;text-align:left;padding-top:'+ (height/2-6) +'px;padding-left:5px;">' + (yLabels[1] || '') + '</div>';
+      dom += '<div class="rlabels" style="margin-bottom:5px;float:left;text-align:left;padding-top:'+ (height/2-6) +'px;padding-left:5px;max-width:60px;">' + (yLabels[1] || '') + '</div>';
       dom += '<div class="rlabels" style="margin-bottom:5px;">' + (xLabels[0] || '') + '</div>';
       dom += '</div>';
 
