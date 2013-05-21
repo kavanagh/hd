@@ -81,10 +81,27 @@ module.exports = function (app, express) {
 
       response = {
         articleId: req.query.article,
-        results: obj
+        results: {}
       };
 
-      if (obj == null) res.status(404);
+      if (obj == null)
+        res.status(404);
+      else {
+        var totalVotes = 0;
+        for (var result in obj) {
+          if (obj.hasOwnProperty(result)) {
+            totalVotes += (+obj[result]);
+          }
+        }
+
+        console.log('totalVotes', totalVotes);
+
+        for (result in obj) {
+          if (obj.hasOwnProperty(result)) {
+            response.results[result] = (+obj[result] / totalVotes) * 100;
+          }
+        }
+      }
 
       res.jsonp(response);
     });
@@ -117,7 +134,7 @@ module.exports = function (app, express) {
       return;
     }
 
-    // Create a new answer if it doesn't exist
+    // Create a new result if it doesn't exist
     redis.setnx('answer:' + req.query.user + ':' + req.query.article, req.query.result, function (err, affected) {
       if (err) throw err;
       console.log('REDIS RESULT', arguments);
