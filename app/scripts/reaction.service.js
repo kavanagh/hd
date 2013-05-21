@@ -27,7 +27,7 @@ var reactor = reactor || {};
       });
     }
 
-    var reaction = mockData.question;
+    var reaction = window.mockData.question;
 
     reaction.userId = user;
     reaction.result = testResult;
