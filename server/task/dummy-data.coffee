@@ -14,7 +14,7 @@ dummy = {
       xLabels: 'Stupid,Clever'
       yLabels: 'Significant,Meh'
     ,
-      articleId: '/cms/s/3/6f4e6cc2-c0c8-11e2-8c63-00144feab7de.html'
+      articleId: '/cms/s/0/d0504cfe-c157-11e2-b93b-00144feab7de.html'
       question: 'How is the deal for Yahoo! shareholders?'
       xTicks: '2'
       yTicks: '1'
