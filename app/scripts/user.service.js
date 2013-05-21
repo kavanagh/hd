@@ -16,10 +16,10 @@ var reactor = reactor || {};
   };
 
   var getUserMockUserId = function() {
-    return testUser;
+    return window.testUser;
   };
 
-  exports.getUserId = testUser ? getUserMockUserId : getUserId;
+  exports.getUserId = window.testUser ? getUserMockUserId : getUserId;
 
   exports.setUserId = function(userId) {
     $.cookie(cookieName, 'USERID=' + userId + ':');
