@@ -7316,7 +7316,6 @@ var reactor = reactor || {};
     },
 
     render: function() {
-      console.log('RENDER');
       var m = this.model.getMatix(),
           reaction = this.model.toJSON(),
           dom = '';
@@ -7338,17 +7337,24 @@ var reactor = reactor || {};
 
       var width = 120, height = 120;
 
+      var xLabels = (reaction.xLabels || '').split(',');
+      var yLabels = (reaction.yLabels || '').split(',');
+
       dom += '<div class="' + containerClass.join(' ') + '">';
       dom += '<div class="reaction-kicker">Reader Reactions:</div>';
       dom += '<div class="reaction-question">' + reaction.question + '</div>';
 
-      dom += '<div class="reaction-controls" style="width:' + width + 'px;height:' + height + 'px;">';
-      dom += '<div class="reaction-graph" style="width:' + width + 'px;height:' + height + 'px;">';
+      dom += '<div class="reaction-controls">';
+
+      dom += '<div class="rlabels" style="margin-top:5px;">' + (xLabels[1] || '') + '</div>';
+      
+      dom += '<div class="rlabels" style="margin-bottom:5px;float:left;text-align:right;padding-top:'+ (height/2-6) +'px;padding-right:5px;">' + (yLabels[0] || '') + '</div>';
+
+      dom += '<div class="reaction-graph" style="float:left;width:' + width + 'px;height:' + height + 'px;">';
 
       var tooltip = !!reaction.userId ? 'Click to react' : '';
 
       var blockWidth = width / reaction.yTicks, blockHeight = Math.max(30, height / reaction.xTicks);
-
 
       dom += $.map(m, function (i, e) {
           return '<div class="reaction-axis" style="width:' + width + 'px;height:' + blockHeight + 'px">' + $.map(i, function(d, j) {
@@ -7357,6 +7363,9 @@ var reactor = reactor || {};
         }).join('');
 
       dom += '</div>';
+
+      dom += '<div class="rlabels" style="margin-bottom:5px;float:left;text-align:left;padding-top:'+ (height/2-6) +'px;padding-left:5px;">' + (yLabels[1] || '') + '</div>';
+      dom += '<div class="rlabels" style="margin-bottom:5px;">' + (xLabels[0] || '') + '</div>';
       dom += '</div>';
 
 
@@ -7375,6 +7384,7 @@ var reactor = reactor || {};
       dom += '</div>';
 
 
+      dom += '<div class="key">0% <div class="colorkey reaction-result-1"></div><div class="colorkey reaction-result-2"></div><div class="colorkey reaction-result-3"></div><div class="colorkey reaction-result-4"></div><div class="colorkey reaction-result-5"></div><div class="colorkey reaction-result-6"></div><div class="colorkey reaction-result-7"></div><div class="colorkey reaction-result-8"></div><div class="colorkey reaction-result-9"></div><div class="colorkey reaction-result-10"></div> 100%</div>'
       dom += '</div>';
 
       this.$el.html(dom);
@@ -7382,13 +7392,13 @@ var reactor = reactor || {};
       var partial = '';
 
       if (reaction.state === 'results') {
-        console.log('RENDER resu')
 
         var reactionNodes = this.$el.find('.reaction');
 
         reactionNodes.removeClass('usable');
 
         reactor.ReactionService.getResults(reaction.articleId).done(function(data) {
+
           var userResultKey = reaction.hasVoted ? reaction.result.x + ',' + reaction.result.y : null;
 
           _.each(data.results, function(value, key){
