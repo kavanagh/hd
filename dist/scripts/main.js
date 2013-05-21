@@ -7134,7 +7134,7 @@ var reactor = reactor || {};
 
   var exports = reactor.UserService = {};
 
-  var cookieName = 'AYSC',
+  var cookieName = 'FT_User',
       ayscCookie = $.cookie(cookieName);
 
   if (ayscCookie) {
