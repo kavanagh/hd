@@ -131,7 +131,7 @@ module.exports = function (app, express) {
 
       // Update the resultsX and resultsY things for this article
       var resultsKey = 'results:' + req.query.article;
-      var answer = JSON.parse(req.query.answer);
+      var answer = JSON.parse(req.query.result);
       var fieldToIncrement = answer.x + ',' + answer.y;
 
       redis.hincrby(resultsKey, fieldToIncrement, 1, function (err, outcome) {
