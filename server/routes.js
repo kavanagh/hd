@@ -92,7 +92,7 @@ module.exports = function (app, express) {
 
 
   // setanswer - (create single result for a given article/user combo).
-  app.get('/setanswer', function (req, res) {
+  app.get('/setresult', function (req, res) {
     // Initialise response by echoing the request properties
     var response = {
           articleId: req.query.article,
