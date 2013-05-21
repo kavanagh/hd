@@ -37,11 +37,12 @@ module.exports = function (app, express) {
     var response;
 
     // Look up question
-    redis.hgetall('article:' + req.query.article, function (err, obj) {
+    var questionKey = 'question:' + req.query.article;
+    redis.hgetall(questionKey, function (err, obj) {
       if (err) throw err;
 
       if (obj == null) {
-        response = {error: 'Article ID not found: ' + req.query.article};
+        response = {error: 'Key not found: ' + questionKey};
         res.jsonp(404, response);
       }
       else {
@@ -116,17 +117,35 @@ module.exports = function (app, express) {
       return;
     }
 
-    // Create a new vote if it doesn't exist
+    // Create a new answer if it doesn't exist
     redis.setnx('answer:' + req.query.user + ':' + req.query.article, req.query.answer, function (err, affected) {
       if (err) throw err;
-
       console.log('REDIS RESULT', arguments);
-
       response.affected = affected;
 
-      res.jsonp(response);
+      if (response.affected !== 1) {
+        res.error = 'Already got this user\'s answer.';
+        res.jsonp(400, response);
+        return;
+      }
 
-      // TODO: increment vote count on the question
+      // Update the resultsX and resultsY things for this article
+      var answer = JSON.parse(req.query.answer);
+
+      redis.hincrby('resultsX:' + req.query.article, answer.x, 1, function (err, outcome) {
+        console.log('outcomeX', outcome);
+
+        redis.hincrby('resultsY:' + req.query.article, answer.y, 1, function (err, outcome) {
+          console.log('outcomeY', outcome);
+
+          // Increment vote count on the question
+          var questionKey = 'question:' + req.query.article;
+          redis.hincrby(questionKey, 'answersCount', 1, function () {
+            console.log('All done.');
+            res.jsonp(response);
+          });
+        });
+      });
     });
   });
 
