@@ -13,6 +13,13 @@ dummy = {
       yTicks: '2'
       xLabels: 'Stupid,Clever'
       yLabels: 'Significant,Meh'
+    ,
+      articleId: '/cms/s/3/6f4e6cc2-c0c8-11e2-8c63-00144feab7de.html'
+      question: 'How is the deal for Yahoo! shareholders?'
+      xTicks: '2'
+      yTicks: '1'
+      xLabels: 'Bad,Good'
+      yLabels: ''
   ]
 
   # resultsX:
@@ -28,7 +35,7 @@ dummy = {
 }
 
 nextQuestion = ->
-  question = questions.pop()
+  question = dummy.questions.pop()
   if question
     
     # HMSET question:/cms/s/2/8a21debe-944e-11e1-bb47-00144feab49a.html question "What do you think about this?" xTicks 2 yTicks 2 xLabels "Outraged,Overjoyed" yLabels "Stupid,Clever"
