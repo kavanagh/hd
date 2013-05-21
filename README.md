@@ -28,3 +28,11 @@ These are all GET requests, as we're doing JSONP.
       article=ARTICLE_ID
       user=USER_ID
       result=ANSWER # x/y object as a JSON string, eg. result={"x":2, "y":3}
+
+
+Installing the Chrome extension
+-------------------------------
+
+1. Open [chrome://extensions](chrome://extensions)
+2. Tick "Developer mode" (top-right) then click "Load unpacked extension"
+3. Select the `chrome-extension` folder in this repo.
