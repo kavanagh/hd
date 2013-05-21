@@ -77,7 +77,7 @@ var reactor = reactor || {};
       dom += '</div>';
 
       dom += '<div class="rlabels" style="margin-bottom:5px;float:left;text-align:left;padding-top:'+ (height/2-6) +'px;padding-left:5px;max-width:60px;">' + (yLabels[1] || '') + '</div>';
-      dom += '<div class="rlabels" style="margin-bottom:5px;">' + (xLabels[0] || '') + '</div>';
+      dom += '<div class="rlabels" style="margin-bottom:5px;clear:left;">' + (xLabels[0] || '') + '</div>';
       dom += '</div>';
 
 
