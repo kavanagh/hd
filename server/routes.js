@@ -91,7 +91,7 @@ module.exports = function (app, express) {
   });
 
 
-  // setanswer - (create single result for a given article/user combo).
+  // setresult - (create single result for a given article/user combo).
   app.get('/setresult', function (req, res) {
     // Initialise response by echoing the request properties
     var response = {
@@ -102,7 +102,7 @@ module.exports = function (app, express) {
 
     // Ensure answer is valid JSON
     try {
-      answer = JSON.parse(req.query.answer);
+      answer = JSON.parse(req.query.result);
     }
     catch (e) {
       response.error = 'Answer must be valid JSON object.';
@@ -118,7 +118,7 @@ module.exports = function (app, express) {
     }
 
     // Create a new answer if it doesn't exist
-    redis.setnx('answer:' + req.query.user + ':' + req.query.article, req.query.answer, function (err, affected) {
+    redis.setnx('answer:' + req.query.user + ':' + req.query.article, req.query.result, function (err, affected) {
       if (err) throw err;
       console.log('REDIS RESULT', arguments);
       response.affected = affected;
