@@ -13,8 +13,6 @@
         result - for this user (if any)
         articleId
 
-    POST /question?article=ARTICLE_ID
-
     GET /results?article=ARTICLE_ID
       Returns:
         articleId
@@ -133,5 +131,5 @@ module.exports = function (app, express) {
   });
 
   
-  
+
 };
