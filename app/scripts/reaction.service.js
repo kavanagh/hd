@@ -1,69 +1,59 @@
 var reactor = reactor || {};
 
-var hostname = null,
-    testResult = null;
-
-// uncomment to have an existing vote
-/* * /
-testResult = {x: 1, y: 1};
-/* */
-
-// uncomment to use mockdata;
-/* * /
-hostname = 'localhost:5000'; //reaction-l.herokuapp.com';
-/* */
-
-var mockData = {
-  question: {question: 'What is your reaction?',  xTicks: 1, yTicks: 4 }
-};
-
-reactor.ReactionService = (function() {
+(function (exports) {
+  
+  var exports = reactor.ReactionService = {};
 
   var createGetRequest = function(path, params) {
+    var h = reactor.hostname || 'ft-reactor.herokuapp.com';
     return  $.ajax({
       method: 'GET',
       timeout: 10000,
       dataType: 'jsonp',
       cache: true,
-      jsonpCallback: 'get_' + path + '_cb',
+      //jsonpCallback: 'get_' + path + '_cb',
       data: params || null,
-      url: ['http:/', hostname, path].join('/')
+      url: ['http:/', h, path].join('/')
     });
   };
 
-  return {
 
-    getQuestion: function (article, user) {
-      if (hostname) {
-        return createGetRequest('question', {article: article, user: user});
-      }
-
-      var reaction = mockData.question;
-
-      reaction.userId = user;
-      reaction.result = testResult;
-
-      return $.Deferred().resolve(reaction);
-
-    },
-
-    getResults: function(article) {
-
-      if (hostname) {
-        return createGetRequest('results', {article: article});
-      }
-
-      return $.Deferred().resolve({
-        article: article,
-        matrix: [[10, 50, 20, 20]]
+  exports.getQuestion = function (article, user) {
+    if (reactor.hostname) {
+      return createGetRequest('question', {article: article, user: user}).pipe(function (data) {
+        data.xTicks = parseInt(data.xTicks, 10);
+        data.yTicks = parseInt(data.yTicks, 10);
+        return data;
       });
-    },
-
-    postVote: function(article, user, result) {
-      article = user = result;
-      return $.Deferred().resolve(true);
     }
 
+    var reaction = mockData.question;
+
+    reaction.userId = user;
+    reaction.result = testResult;
+
+    return $.Deferred().resolve(reaction);
+
+  };
+
+  exports.getResults = function(article) {
+
+    if (reactor.hostname) {
+      return createGetRequest('results', {article: article});
+    }
+
+    mockData.results.article = article;
+
+    return $.Deferred().resolve(mockData.results);
+  };
+
+  exports.postVote = function(article, user, result) {
+    
+    if (reactor.hostname) {
+      return createGetRequest('setresult', {article: article, user: user, result: !!result ? JSON.stringify(result) : '' });
+    }
+
+    return $.Deferred().resolve(true);
   };
 
 }());

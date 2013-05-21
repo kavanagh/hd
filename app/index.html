@@ -15,7 +15,50 @@
     <body>
         <div id="target1"></div>
         <div id="target2"></div>
+        <style>
+        body {
+            background: #fff1e0;
+        }
 
+        </style>
+        <script>
+        var reactor = reactor || {};
+
+        var testResult = null;
+
+
+        // uncomment to have an existing vote
+        /* * /
+        testResult = {x: 1, y: 1};
+        /* */
+
+        var testArticle = null;
+
+
+        // uncomment to have an existing vote
+        /* */
+        testArticle = '/cms/s/2/8a21debe-944e-11e1-bb47-00144feab49a.html';
+        /* */
+
+        // uncomment to use mockdata;
+        /* */
+        reactor.hostname = 'reaction-c.herokuapp.com';
+        /* */
+
+        var mockData = {
+          question: {question: 'What is your reaction blah balh blah?',  xTicks: 4, yTicks: 4, count: 100},
+          //results: {matrix: {'1,1': 20, '1,2': 10, '2,2': 40}}// 2x2
+          results: {matrix: {'1,1': 20, '1,2': 10, '2,2': 40, '2,3': 20, '4,4': 50, '3,1': 100}} // 4x4
+        };
+
+        var testUser = null;
+
+        // uncomment to have a test user
+        /* */
+        testUser = '111030393456';
+        /* */
+
+        </script>
         <!-- build:js scripts/ft.js -->
         <script src="components/jquery/jquery.js"></script>
         <script src="components/jquery.cookie/jquery.cookie.js"></script>
@@ -27,7 +70,7 @@
         <script src="scripts/user.service.js"></script>
         <script src="scripts/reaction.service.js"></script>
         <script src="scripts/reaction.model.js"></script>
-        <script src="scripts/votewidget.view.js"></script>
+        <script src="scripts/app.view.js"></script>
         <script src="scripts/main.js"></script>
         <!-- endbuild -->
 

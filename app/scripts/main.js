@@ -1,23 +1,26 @@
 var reactor = reactor || {};
 
-$(function() {
+(function() {
 
   'use strict';
 
   var targets = '#target1, #target2',
-      article = 'foobar' || location.pathname,
+      article = testArticle || location.pathname,
       user = reactor.UserService.getUserId();
-console.log(article, user);
-  reactor.ReactionService.getQuestion(article, user).done(function (question) {
 
-    var reaction = new reactor.Reaction(question);
+  var createContainerElement = function(target) {
+    return $('<div />').insertAfter(target)[0];
+  };
 
-    $(targets).each(function () {
-      var target = $(this);
+  reactor.Reaction.fetchQuestion(article, user).done(function (model) {
 
-      new reactor.VoteWidget({model: reaction, el: $('<div />').insertAfter(target)[0]}).render();
-    });
+      $(function () {
+        $(targets).each(function (indx, element) {
+          var container = createContainerElement(element);
+          new reactor.AppView({model: model, el: container}).render();
+        });
+      });
 
   });
 
-});
+}());
