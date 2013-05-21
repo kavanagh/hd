@@ -52,5 +52,5 @@ redis = require("redis-url").connect(redisUrl)
 nextQuestion()
 
 
-redis.del 'answer:4008770966:/cms/s/0/d0504cfe-c157-11e2-b93b-00144feab7de.html' ->
-  console.log 'done it...'
+redis.del 'answer:4008770966:/cms/s/0/d0504cfe-c157-11e2-b93b-00144feab7de.html', ->
+  console.log 'deleted lukes answer', arguments
