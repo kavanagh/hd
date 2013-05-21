@@ -24,7 +24,7 @@ $claret-text: #9b164f;
 
 .reaction-info {
   @extend .pull-left;
-  width: 160px;
+  width: 90px;
 }
 
 .reaction-controls {
@@ -165,7 +165,8 @@ $claret-text: #9b164f;
 .reaction-count{
  color:$claret-text;
  font-family: $sans;
- font-size: 15px;
+ font-size: 11px;
+ margin-bottom: 10px;
  span{
  font-size: 20px;
  padding-top:10px;
