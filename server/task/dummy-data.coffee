@@ -34,6 +34,10 @@ dummy = {
   #     '2,2': '4'
 }
 
+redisUrl = process.env.REDISTOGO_URL or "redis://localhost:6379"
+redis = require("redis-url").connect(redisUrl)
+
+
 nextQuestion = ->
   question = dummy.questions.pop()
   if question
@@ -47,8 +51,7 @@ nextQuestion = ->
 
 dummyData = require("./dummy-data")
 questions = dummyData.questions
-redisUrl = process.env.REDISTOGO_URL or "redis://localhost:6379"
-redis = require("redis-url").connect(redisUrl)
+
 nextQuestion()
 
 
